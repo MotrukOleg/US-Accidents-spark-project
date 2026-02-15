@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+*.pyo
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+bigdata_pyspark/
+
+# Jupyter
+.ipynb_checkpoints
+
+# PySpark / Spark
+metastore_db/
+spark-warehouse/
+*.crc
+*.parquet
+*.snappy.parquet
+
+# Data files
+data/
+*.csv
+*.tsv
+*.json
+*.gz
+
+# PyCharm
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# Docker
+*.tar
+*.log
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Build / cache
+
+build/
+dist/
+*.egg-info/
