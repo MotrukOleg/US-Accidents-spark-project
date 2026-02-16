@@ -119,7 +119,7 @@ The project supports both Docker-based and local PySpark environments.
 # Учасники
 
 - Ігор Яцишин  
-- Олег Мторук 
+- Олег Мотрук 
 - Олеся Янків  
 - Юрій Грабовський  
 - Яна Виклюк  
@@ -211,4 +211,5 @@ The project supports both Docker-based and local PySpark environments.
 **ВСІ** — збереження результатів  
 
 **Відповідальний:** Юрій Грабовський  
+
 
