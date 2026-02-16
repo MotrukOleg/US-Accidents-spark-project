@@ -132,7 +132,7 @@ The project supports both Docker-based and local PySpark environments.
 
 # Підготовчий етап
 
-**Олег Мторук** — репозиторій і гілки  
+**Олег Мотрук** — репозиторій і гілки  
 **Яна Виклюк** — опис даних  
 **Ігор Яцишин** — .gitignore, README  
 **Олеся Янків** — звіт/презентація, створення борди  
@@ -211,6 +211,7 @@ The project supports both Docker-based and local PySpark environments.
 **ВСІ** — збереження результатів  
 
 **Відповідальний:** Юрій Грабовський  
+
 
 
 
