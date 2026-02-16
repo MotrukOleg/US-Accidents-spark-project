@@ -194,7 +194,7 @@ The project supports both Docker-based and local PySpark environments.
 - Проаналізувати плани виконання через explain()
 
 **Яна Виклюк** — звіт/презентація  
-**Олег Мторук** — звіт/презентація  
+**Олег Мотрук** — звіт/презентація  
 
 **ВСІ** — запити та аналіз  
 
@@ -211,6 +211,7 @@ The project supports both Docker-based and local PySpark environments.
 **ВСІ** — збереження результатів  
 
 **Відповідальний:** Юрій Грабовський  
+
 
 
 
