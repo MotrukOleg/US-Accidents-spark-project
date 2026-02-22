@@ -1,15 +1,13 @@
-ARG IMAGE_VARIANT=slim-buster
-ARG OPENJDK_VERSION=8
-ARG PYTHON_VERSION=3.9.8
+FROM python:3.9-slim-bullseye
 
-FROM python:${PYTHON_VERSION}-${IMAGE_VARIANT} AS py3
-FROM openjdk:${OPENJDK_VERSION}-${IMAGE_VARIANT}
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jre-headless && \
+    apt-get clean
 
-COPY --from=py3 / /
+RUN pip install --no-cache-dir pyspark==3.2.0
 
-ARG PYSPARK_VERSION=3.2.0
-RUN pip --no-cache-dir install pyspark==${PYSPARK_VERSION}
+WORKDIR /app
 
-COPY . .
+COPY . /app
 
-CMD python main.py
+CMD ["python", "main.py"]
