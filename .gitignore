@@ -27,6 +27,7 @@ spark-warehouse/
 # Data files
 data/
 *.csv
+*.parquet
 *.tsv
 *.json
 *.gz
