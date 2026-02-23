@@ -37,6 +37,9 @@ data/
 # VSCode
 .vscode/
 
+# VStudio
+.vs/
+
 # Docker
 *.tar
 *.log
