@@ -8,3 +8,15 @@ def load_data(spark: SparkSession, path: str, schema) -> DataFrame:
         .csv(path)
     )
 
+def verify_data(df: DataFrame):
+    print("\n--- Перевірка даних ---")
+
+    df.printSchema()
+
+    count = df.count()
+    print(f"Кількість завантажених рядків: {count}")
+
+    df.show(5, truncate=True)
+
+    if count == 0:
+        print("[WARNING] DataFrame порожній!")
