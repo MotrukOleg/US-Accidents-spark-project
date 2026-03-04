@@ -5,6 +5,8 @@ from pyspark.sql import SparkSession
 from schemas.raw_schema import raw_schema
 from config import DATA_PATH
 
+from modules.extraction import load_data, verify_data
+
 
 def main():
     os.environ['PYSPARK_PYTHON'] = sys.executable
@@ -14,26 +16,19 @@ def main():
         SparkSession.builder
         .appName("US-Accidents-Project")
         .config("spark.driver.host", "localhost")
+        .config("spark.sql.debug.maxToStringFields", "1000")
         .getOrCreate()
     )
 
     print("\n--- Spark Session успішно ініціалізована ---\n")
 
-    df = (
-        spark.read
-        .schema(raw_schema)
-        .option("header", True)
-        .csv(DATA_PATH)
-    )
+    print("--- Етап видобування (Extraction) ---")
 
-    print("=== SCHEMA ===")
-    df.printSchema()
+    raw_df = load_data(spark, DATA_PATH, raw_schema)
 
-    print("\n=== FIRST 5 ROWS ===")
-    df.show(5, truncate=False)
+    verify_data(raw_df)
 
-    print("\n=== ROW COUNT ===")
-    print(df.count())
+    print("\n--- Етап видобування успішно завершено ---")
 
     spark.stop()
 
