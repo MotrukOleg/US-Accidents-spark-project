@@ -1,11 +1,10 @@
 import os
 import sys
 from pyspark.sql import SparkSession
-
 from schemas.raw_schema import raw_schema
-from config import DATA_PATH
-
+from config import DATA_PATH, CATEGORICAL_COLUMNS
 from modules.extraction import load_data, verify_data
+from modules.eda_stats import get_metadata, run_categorical_eda
 
 
 def main():
@@ -23,15 +22,15 @@ def main():
     print("\n--- Spark Session успішно ініціалізована ---\n")
 
     print("--- Етап видобування (Extraction) ---")
-
     raw_df = load_data(spark, DATA_PATH, raw_schema)
-
     verify_data(raw_df)
 
-    print("\n--- Етап видобування успішно завершено ---")
+    print("\n--- Етап аналізу (EDA) ---")
+    get_metadata(raw_df)
+    run_categorical_eda(raw_df, CATEGORICAL_COLUMNS)
 
+    print("\n--- Етап видобування та аналізу успішно завершено ---")
     spark.stop()
-
 
 if __name__ == "__main__":
     main()
