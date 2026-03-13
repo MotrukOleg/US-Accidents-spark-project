@@ -2,9 +2,9 @@ import os
 import sys
 from pyspark.sql import SparkSession
 from schemas.raw_schema import raw_schema
-from config import DATA_PATH, CATEGORICAL_COLUMNS
+from config import DATA_PATH, CATEGORICAL_COLUMNS, NUMERICAL_COLUMNS
 from modules.extraction import load_data, verify_data
-from modules.eda_stats import get_metadata, run_categorical_eda
+from modules.eda_stats import get_metadata, run_categorical_eda, run_numerical_eda
 
 
 def main():
@@ -26,11 +26,18 @@ def main():
     verify_data(raw_df)
 
     print("\n--- Етап аналізу (EDA) ---")
+
     get_metadata(raw_df)
+
+    print("\n--- Аналіз числових ознак ---")
+    run_numerical_eda(raw_df, NUMERICAL_COLUMNS)
+
+    print("\n--- Аналіз категоріальних ознак ---")
     run_categorical_eda(raw_df, CATEGORICAL_COLUMNS)
 
     print("\n--- Етап видобування та аналізу успішно завершено ---")
     spark.stop()
+
 
 if __name__ == "__main__":
     main()

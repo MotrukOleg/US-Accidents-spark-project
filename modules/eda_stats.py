@@ -2,6 +2,7 @@ import os
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pyspark.sql.functions as F
+from pyspark.sql.types import NumericType
 from config import OUTPUT_PLOT_DIR
 
 
@@ -45,3 +46,37 @@ def run_categorical_eda(df, categorical_cols):
 
             if not pd_df.empty:
                 plot_categorical_feature(pd_df, col_name)
+
+def get_numeric_columns_from_schema(df):
+    numeric_cols = []
+    for field in df.schema.fields:
+        if isinstance(field.dataType, NumericType):
+            numeric_cols.append(field.name)
+    return numeric_cols
+
+
+def get_numerical_stats(df, col_name):
+    stats_df = df.select(
+        F.count(F.col(col_name)).alias("count"),
+        F.count(F.when(F.col(col_name).isNull(), 1)).alias("nulls"),
+        F.mean(F.col(col_name)).alias("mean"),
+        F.stddev(F.col(col_name)).alias("stddev"),
+        F.min(F.col(col_name)).alias("min"),
+        F.expr(f"percentile_approx(`{col_name}`, 0.25)").alias("q1"),
+        F.expr(f"percentile_approx(`{col_name}`, 0.5)").alias("median"),
+        F.expr(f"percentile_approx(`{col_name}`, 0.75)").alias("q3"),
+        F.max(F.col(col_name)).alias("max")
+    )
+
+    return stats_df
+
+
+def run_numerical_eda(df, numerical_cols):
+    print("\n--- Статистика числових ознак ---")
+
+    for col_name in numerical_cols:
+        if col_name in df.columns:
+            print(f"\n--- Аналіз: {col_name} ---")
+
+            stats_df = get_numerical_stats(df, col_name)
+            stats_df.show(truncate=False)
