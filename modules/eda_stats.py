@@ -47,13 +47,6 @@ def run_categorical_eda(df, categorical_cols):
             if not pd_df.empty:
                 plot_categorical_feature(pd_df, col_name)
 
-def get_numeric_columns_from_schema(df):
-    numeric_cols = []
-    for field in df.schema.fields:
-        if isinstance(field.dataType, NumericType):
-            numeric_cols.append(field.name)
-    return numeric_cols
-
 
 def get_numerical_stats(df, col_name):
     stats_df = df.select(
@@ -80,3 +73,34 @@ def run_numerical_eda(df, numerical_cols):
 
             stats_df = get_numerical_stats(df, col_name)
             stats_df.show(truncate=False)
+
+
+def plot_numerical_feature(df, col_name):
+    os.makedirs(OUTPUT_PLOT_DIR, exist_ok=True)
+
+    pd_df = df.select(col_name).dropna().toPandas()
+
+    if not pd_df.empty:
+        lower_bound = pd_df[col_name].quantile(0.01)
+        upper_bound = pd_df[col_name].quantile(0.99)
+
+        filtered_df = pd_df[
+            (pd_df[col_name] >= lower_bound) &
+            (pd_df[col_name] <= upper_bound)
+        ]
+
+        plt.figure(figsize=(10, 6))
+        sns.histplot(data=filtered_df, x=col_name, kde=True)
+        plt.title(f"Розподіл {col_name}")
+        plt.xlim(lower_bound, upper_bound)
+        plt.tight_layout()
+        plt.savefig(os.path.join(OUTPUT_PLOT_DIR, f"{col_name}_dist.png"))
+        plt.close()
+
+
+def run_numerical_plots(df, numerical_cols):
+    for col_name in numerical_cols:
+        if col_name in df.columns:
+            print(f"\n--- Графік: {col_name} ---")
+
+            plot_numerical_feature(df, col_name)
