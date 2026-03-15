@@ -3,6 +3,7 @@ import sys
 from pyspark.sql import SparkSession
 from schemas.raw_schema import raw_schema
 from config import DATA_PATH, CATEGORICAL_COLUMNS, NUMERICAL_COLUMNS
+from modules.parsing import parse_and_transform_features
 from modules.extraction import load_data, verify_data
 from modules.eda_stats import (
     get_metadata,
@@ -43,9 +44,11 @@ def main():
     print("\n--- Аналіз категоріальних ознак ---")
     run_categorical_eda(raw_df, CATEGORICAL_COLUMNS)
 
+    print("\n--- Приведення типів та парсинг даних ---")
+    processed_df = parse_and_transform_features(raw_df)
+
     print("\n--- Етап видобування та аналізу успішно завершено ---")
     spark.stop()
-
 
 if __name__ == "__main__":
     main()
