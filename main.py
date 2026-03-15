@@ -11,6 +11,7 @@ from modules.eda_stats import (
     run_numerical_eda,
     run_numerical_plots
 )
+from modules.feature_selection import select_features
 
 
 def main():
@@ -46,6 +47,9 @@ def main():
 
     print("\n--- Приведення типів та парсинг даних ---")
     processed_df = parse_and_transform_features(raw_df)
+
+    print("\n--- Вибір ознак ---")
+    processed_df = select_features(processed_df)
 
     print("\n--- Етап видобування та аналізу успішно завершено ---")
     spark.stop()
