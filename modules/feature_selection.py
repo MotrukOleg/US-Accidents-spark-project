@@ -8,12 +8,9 @@ def select_features(df):
 
 def delete_features(df):
 
-    no_column_needed = ["ID", "Source"]
+    no_column_needed = ["Source"]
     lot_of_missing_values = ["End_Lat", "End_Lng"]
-    highly_correlated = ["Wind_Chill(F)", "Airport_Code", "Visibility(mi)", "Weather_Timestamp"]
-    traffic_control_cols = ['Traffic_Signal', 'Stop', 'Give_Way','Bump']
-    road_geometry_cols = ['Junction', 'Crossing', 'Railway', 'Roundabout']
-    surroundings_cols = ['Station', 'Amenity', 'No_Exit', 'Traffic_Calming']
+    highly_correlated = ["Wind_Chill(F)", "Airport_Code","Weather_Timestamp"]
     twilight_cols = ["Sunrise_Sunset", "Civil_Twilight", "Nautical_Twilight", "Astronomical_Twilight"]
     other = ["Description","Street","Country",]
 
@@ -21,9 +18,6 @@ def delete_features(df):
             no_column_needed +
             lot_of_missing_values +
             highly_correlated +
-            traffic_control_cols +
-            road_geometry_cols +
-            surroundings_cols +
             twilight_cols +
             other
     )
@@ -70,21 +64,6 @@ def merge_features(df):
     """
 
     df = change_twilights_values(df)
-
-    df = df.withColumn("Traffic_Control_Presence",
-                       ((col('Traffic_Signal') == True) | (col('Stop') == True) |
-                        (col('Give_Way') == True) | (col('Bump') == True)).cast("int")
-                       )
-
-    df = df.withColumn("Road_Geometry_Presence",
-                       ((col('Junction') == True) | (col('Crossing') == True) |
-                        (col('Railway') == True) | (col('Roundabout') == True)).cast("int")
-                       )
-
-    df = df.withColumn("Surroundings_Presence",
-                       ((col('Station') == True) | (col('Amenity') == True) |
-                        (col('No_Exit') == True) | (col('Traffic_Calming') == True)).cast("int")
-                       )
 
     df = df.withColumn("Light_Level",
                        col('Astronomical_Twilight') + col('Nautical_Twilight') +
