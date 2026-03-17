@@ -37,16 +37,16 @@ def main():
 
     print("\n--- Етап аналізу (EDA) ---")
 
-    #get_metadata(raw_df)
+    get_metadata(raw_df)
 
     print("\n--- Аналіз числових ознак ---")
-    #run_numerical_eda(raw_df, NUMERICAL_COLUMNS)
+    run_numerical_eda(raw_df, NUMERICAL_COLUMNS)
 
     print("\n--- Побудова графіків числових ознак ---")
-    #run_numerical_plots(raw_df, NUMERICAL_COLUMNS)
+    run_numerical_plots(raw_df, NUMERICAL_COLUMNS)
 
     print("\n--- Аналіз категоріальних ознак ---")
-    #run_categorical_eda(raw_df, CATEGORICAL_COLUMNS)
+    run_categorical_eda(raw_df, CATEGORICAL_COLUMNS)
 
     print("\n--- Аналіз якості даних до інженерії ознак ---")
     check_data_quality(raw_df)
