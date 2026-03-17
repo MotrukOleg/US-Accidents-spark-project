@@ -12,6 +12,7 @@ from modules.eda_stats import (
     run_numerical_plots
 )
 from modules.feature_selection import select_features
+from modules.data_quality import check_data_quality
 
 
 def main():
@@ -45,13 +46,19 @@ def main():
     print("\n--- Аналіз категоріальних ознак ---")
     run_categorical_eda(raw_df, CATEGORICAL_COLUMNS)
 
+    print("\n--- Аналіз якості даних до інженерії ознак ---")
+    check_data_quality(raw_df)
+
     print("\n--- Приведення типів та парсинг даних ---")
     processed_df = parse_and_transform_features(raw_df)
 
     print("\n--- Вибір ознак ---")
     processed_df = select_features(processed_df)
 
-    print("\n--- Етап видобування та аналізу успішно завершено ---")
+    print("\n--- Аналіз якості даних після інженерії ознак ---")
+    check_data_quality(processed_df)
+
+    print("\n--- Етап видобування, аналізу та попередньої обробки успішно завершено ---")
     spark.stop()
 
 if __name__ == "__main__":
