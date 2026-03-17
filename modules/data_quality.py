@@ -1,5 +1,6 @@
 import pyspark.sql.functions as F
 from pyspark.sql import DataFrame
+from config import DRY_CONDITIONS, PERFECT_VISIBILITY_CONDITIONS, POOR_VISIBILITY_CONDITIONS
 
 
 def check_duplicates(df: DataFrame):
@@ -81,3 +82,40 @@ def remove_duplicates(df: DataFrame) -> DataFrame:
     print(f"Видалено записів: {removed} ({(removed / initial_count) * 100:.4f}%)")
 
     return df_cleaned
+
+def handle_missing_values(df: DataFrame) -> DataFrame:
+    print("\n--- Опрацювання пропусків ---")
+    initial_count = df.count()
+
+    critical_geo_cols = ['City', 'Zipcode', 'Zipcode_Base', 'Timezone']
+    subset_to_drop = [c for c in critical_geo_cols if c in df.columns]
+
+    df = df.dropna(subset=subset_to_drop)
+
+    num_cols = ["Temperature(F)", "Humidity(%)", "Pressure(in)", "Visibility(mi)", "Wind_Speed(mph)", "Precipitation(in)"]
+    medians = {}
+
+    agg_exprs = [F.percentile_approx(F.col(c), 0.5).alias(c) for c in num_cols]
+    medians = df.select(agg_exprs).collect()[0].asDict()
+
+    df = df.withColumn("Precipitation(in)",
+                       F.when(F.col("Precipitation(in)").isNotNull(), F.col("Precipitation(in)"))
+                       .when(F.col("Weather_Condition").isin(DRY_CONDITIONS) | F.col("Weather_Condition").isNull(), 0.0)
+                       .otherwise(medians["Precipitation(in)"])
+                       )
+
+    df = df.withColumn("Visibility(mi)",
+                       F.when(F.col("Visibility(mi)").isNotNull(), F.col("Visibility(mi)"))
+                       .when(F.col("Weather_Condition").isin(PERFECT_VISIBILITY_CONDITIONS), 10.0)
+                       .when(F.col("Weather_Condition").isin(POOR_VISIBILITY_CONDITIONS), 1.0)
+                       .otherwise(medians["Visibility(mi)"])
+                       )
+
+    df = df.fillna({c: medians[c] for c in num_cols if c in medians and c not in ["Precipitation(in)", "Visibility(mi)"]})
+
+    df = df.fillna({"Weather_Condition": "Unknown", "Wind_Direction": "Unknown"})
+
+    final_count = df.count()
+    print(f"Очищення завершено. Видалено рядків: {initial_count - final_count}")
+
+    return df
