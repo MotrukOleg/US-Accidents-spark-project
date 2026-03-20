@@ -5,16 +5,13 @@ import pyspark.sql.functions as F
 from pyspark.sql.types import NumericType
 from config import OUTPUT_PLOT_DIR
 
-
 def get_metadata(df):
     print(f"Загальна кількість рядків: {df.count()}")
     print(f"Кількість колонок: {len(df.columns)}")
 
-
 def get_categorical_stats(df, col_name):
     stats_df = df.groupBy(col_name).count().orderBy(F.desc("count"))
     return stats_df
-
 
 def plot_categorical_feature(pd_df, col_name):
     os.makedirs(OUTPUT_PLOT_DIR, exist_ok=True)
@@ -33,7 +30,6 @@ def plot_categorical_feature(pd_df, col_name):
     plt.savefig(os.path.join(OUTPUT_PLOT_DIR, f"{col_name}_dist.png"))
     plt.close()
 
-
 def run_categorical_eda(df, categorical_cols):
     for col_name in categorical_cols:
         if col_name in df.columns:
@@ -46,7 +42,6 @@ def run_categorical_eda(df, categorical_cols):
 
             if not pd_df.empty:
                 plot_categorical_feature(pd_df, col_name)
-
 
 def get_numerical_stats(df, col_name):
     stats_df = df.select(
@@ -63,7 +58,6 @@ def get_numerical_stats(df, col_name):
 
     return stats_df
 
-
 def run_numerical_eda(df, numerical_cols):
     print("\n--- Статистика числових ознак ---")
 
@@ -73,7 +67,6 @@ def run_numerical_eda(df, numerical_cols):
 
             stats_df = get_numerical_stats(df, col_name)
             stats_df.show(truncate=False)
-
 
 def plot_numerical_feature(df, col_name):
     os.makedirs(OUTPUT_PLOT_DIR, exist_ok=True)
@@ -97,10 +90,8 @@ def plot_numerical_feature(df, col_name):
         plt.savefig(os.path.join(OUTPUT_PLOT_DIR, f"{col_name}_dist.png"))
         plt.close()
 
-
 def run_numerical_plots(df, numerical_cols):
     for col_name in numerical_cols:
         if col_name in df.columns:
             print(f"\n--- Графік: {col_name} ---")
-
             plot_numerical_feature(df, col_name)
