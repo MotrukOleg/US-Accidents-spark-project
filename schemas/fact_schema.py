@@ -11,4 +11,5 @@ fact_schema = StructType([
     StructField("WeatherID", IntegerType(), False),
     StructField("RoadID", IntegerType(), False),
     StructField("LocationID", IntegerType(), False),
+    StructField("TimeID", IntegerType(), False),
 ])
