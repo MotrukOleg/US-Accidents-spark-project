@@ -12,7 +12,7 @@ def delete_features(df):
     lot_of_missing_values = ["End_Lat", "End_Lng"]
     highly_correlated = ["Wind_Chill(F)", "Airport_Code","Weather_Timestamp"]
     twilight_cols = ["Sunrise_Sunset", "Civil_Twilight", "Nautical_Twilight", "Astronomical_Twilight"]
-    other = ["Description","Street","Country",]
+    other = ["Description","Street","Country","Zipcode","Turning_Loop"]
 
     to_drop = (
             no_column_needed +

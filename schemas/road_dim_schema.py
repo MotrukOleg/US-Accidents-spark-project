@@ -14,5 +14,4 @@ road_dim_schema = StructType([
     StructField("Stop", BooleanType(), False),
     StructField("Traffic_Calming", BooleanType(), False),
     StructField("Traffic_Signal", BooleanType(), False),
-    StructField("Turning_Loop", BooleanType(), False),
 ])
