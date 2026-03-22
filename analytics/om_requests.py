@@ -1,5 +1,23 @@
 from pyspark.sql import functions as F, Window
 
+def om_requests(olap):
+    get_extreme_delay_anomalies(olap).show(10, False)
+    get_extreme_delay_anomalies(olap).explain()
+
+    get_severity_by_weather(olap).show(10, False)
+    get_severity_by_weather(olap).explain()
+
+    get_top_dangerous_hours_per_state(olap).show(10, False)
+    get_top_dangerous_hours_per_state(olap).explain()
+
+    get_hourly_trend_by_state(olap).show(10, False)
+    get_hourly_trend_by_state(olap).explain()
+
+    get_night_accident_percentage(olap).show(10, False)
+    get_night_accident_percentage(olap).explain()
+
+    get_infrastructure_contribution_by_state(olap).show(10, False)
+    get_infrastructure_contribution_by_state(olap).explain()
 
 def get_severity_by_weather(olap_tables):
     facts = olap_tables["accidents_fact"]

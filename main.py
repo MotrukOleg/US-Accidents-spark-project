@@ -76,6 +76,6 @@ print("\n--- Етап видобування, аналізу та поперед
 
 
 print("\n --- запити до OLAP-куба --- \n")
-get_extreme_delay_anomalies(olap).show(10, False)
+om_requests(olap)
 
 spark.stop()
