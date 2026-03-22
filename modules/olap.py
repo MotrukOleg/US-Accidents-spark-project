@@ -11,9 +11,6 @@ from schemas.fact_schema import fact_schema
 
 
 def create_olap(df):
-    def get_safe_cols(schema, id_name=None, df_actual=None):
-        return [field.name for field in schema.fields
-                if field.name != id_name and field.name in df_actual.columns]
 
     road_cols = get_safe_cols(road_dim_schema, "RoadID", df)
 
@@ -74,6 +71,9 @@ def create_olap(df):
         "accidents_fact": accidents_fact
     }
 
+def get_safe_cols(schema, id_name=None, df_actual=None):
+    return [field.name for field in schema.fields
+            if field.name != id_name and field.name in df_actual.columns]
 
 def check_olap_dimensions(dimensions):
     for dim_df, dim_name in dimensions.items():

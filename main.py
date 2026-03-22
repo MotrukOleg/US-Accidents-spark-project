@@ -10,9 +10,9 @@ from pyspark.sql import SparkSession
 from modules.feature_selection import select_features
 from modules.extraction import load_data, verify_data
 from modules.parsing import parse_and_transform_features
-from modules.olap import create_olap, check_olap_dimensions
 from modules.data_quality import check_data_quality, remove_duplicates, handle_missing_values
 from modules.eda_stats import get_metadata,run_categorical_eda,run_numerical_eda,run_numerical_plots
+from modules.olap import create_olap, check_olap_dimensions
 
 from schemas.raw_schema import raw_schema
 
@@ -73,6 +73,7 @@ print("\n--- Створення OLAP-куба ---")
 olap = create_olap(processed_df)
 
 print("\n--- Етап видобування, аналізу та попередньої обробки успішно завершено ---")
+
 
 print("\n --- запити до OLAP-куба --- \n")
 get_extreme_delay_anomalies(olap).show(10, False)
