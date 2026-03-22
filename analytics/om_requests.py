@@ -57,4 +57,46 @@ def get_night_accident_percentage(olap):
     return (night_by_city.join(total_by_city, ["State", "City"])
         .withColumn("Night_Ratio", F.round((F.col("Night_Accidents") / F.col("Total_Accidents")) * 100, 2))
         .filter(F.col("Total_Accidents") > 50)
-        .orderBy(F.desc("Night_Ratio")))
+        .orderBy(F.desc("Night_Ratio"))
+            )
+
+def get_infrastructure_contribution_by_state(olap):
+    infra_types = ["Traffic_Signal", "Crossing", "Junction", "Stop"]
+
+    base_df = (olap["accidents_fact"]
+        .join(F.broadcast(olap["location_dim"]), "LocationID")
+        .join(F.broadcast(olap["road_dim"]), "RoadID")
+               )
+
+    contribution_df = base_df.groupBy("State").agg(
+        F.count("ID").alias("Total_State_Accidents"),
+        *[F.sum(F.when(F.col(c) == True, 1).otherwise(0)).alias(c) for c in infra_types]
+    )
+
+    for c in infra_types:
+        contribution_df = contribution_df.withColumn(
+            f"{c}_Percent",
+            F.round((F.col(c) / F.col("Total_State_Accidents")) * 100, 2)
+        )
+
+    return (contribution_df.select("State", "Total_State_Accidents",
+                                  *[f"{c}_Percent" for c in infra_types])
+                            .orderBy(F.desc("Total_State_Accidents"))
+            )
+
+def get_extreme_delay_anomalies(olap):
+    df = olap["accidents_fact"].join(F.broadcast(olap["location_dim"]), "LocationID")
+
+    city_window = Window.partitionBy("State", "City")
+
+    return (df.withColumn("City_Avg_Duration", F.avg("Duration_Minutes").over(city_window))
+             .withColumn("Deviation_Factor", F.col("Duration_Minutes") / F.col("City_Avg_Duration"))
+             .filter(
+                 (F.col("Duration_Minutes") > 60) &
+                 (F.col("Deviation_Factor") > 2.5)
+             )
+             .select("ID", "State", "City", "Duration_Minutes",
+                     F.round("City_Avg_Duration", 2).alias("Avg_In_City"),
+                     F.round("Deviation_Factor", 2).alias("Anomaly_Index"))
+             .orderBy(F.desc("Deviation_Factor"))
+            )

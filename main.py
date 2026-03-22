@@ -24,6 +24,7 @@ spark = (
     .appName("US-Accidents-Project")
     .config("spark.driver.memory", "4g")
     .config("spark.executor.memory", "4g")
+    .config("spark.local.dir", "E:/spark_temp")
     .config("spark.driver.host", "localhost")
     .config("spark.sql.debug.maxToStringFields", "1000")
     .getOrCreate()
@@ -75,6 +76,6 @@ olap = create_olap(processed_df)
 print("\n--- Етап видобування, аналізу та попередньої обробки успішно завершено ---")
 
 print("\n --- запити до OLAP-куба --- \n")
-get_top_dangerous_hours_per_state(olap).show(50, False)
+get_extreme_delay_anomalies(olap).show(10, False)
 
 spark.stop()
