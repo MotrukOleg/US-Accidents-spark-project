@@ -1,6 +1,8 @@
 import os
 import sys
 
+from analytics.om_requests import *
+
 from config import DATA_PATH, CATEGORICAL_COLUMNS, NUMERICAL_COLUMNS
 
 from pyspark.sql import SparkSession
@@ -69,8 +71,11 @@ check_data_quality(processed_df)
 print("\n--- Створення OLAP-куба ---")
 
 olap = create_olap(processed_df)
-check_olap_dimensions(olap)
 
 print("\n--- Етап видобування, аналізу та попередньої обробки успішно завершено ---")
+
+
+print("\n --- запити до OLAP-куба --- \n")
+get_extreme_delay_anomalies(olap).show(10, False)
 
 spark.stop()
