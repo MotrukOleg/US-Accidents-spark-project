@@ -10,6 +10,7 @@ from modules.extraction import load_data, verify_data
 from modules.parsing import parse_and_transform_features
 from modules.data_quality import check_data_quality, remove_duplicates, handle_missing_values
 from modules.eda_stats import get_metadata,run_categorical_eda,run_numerical_eda,run_numerical_plots
+from modules.olap import create_olap, check_olap_dimensions
 
 from schemas.raw_schema import raw_schema
 
@@ -30,10 +31,10 @@ print("\n--- Spark Session успішно ініціалізована ---\n")
 
 print("--- Етап видобування (Extraction) ---")
 raw_df = load_data(spark, DATA_PATH, raw_schema)
+
 verify_data(raw_df)
 
 print("\n--- Етап аналізу (EDA) ---")
-
 get_metadata(raw_df)
 
 print("\n--- Аналіз числових ознак ---")
@@ -65,5 +66,11 @@ processed_df = handle_missing_values(processed_df)
 print("\n--- Аналіз якості даних після обробки ---")
 check_data_quality(processed_df)
 
+print("\n--- Створення OLAP-куба ---")
+
+olap = create_olap(processed_df)
+check_olap_dimensions(olap)
+
 print("\n--- Етап видобування, аналізу та попередньої обробки успішно завершено ---")
+
 spark.stop()

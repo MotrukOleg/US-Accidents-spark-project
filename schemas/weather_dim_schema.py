@@ -2,9 +2,7 @@ from pyspark.sql.types import *
 
 weather_dim_schema = StructType([
     StructField("WeatherID", IntegerType(), False),
-    StructField("Weather_Timestamp", TimestampNTZType(), True),
     StructField("Temperature(F)", DoubleType(), True),
-    StructField("Wind_Chill(F)", DoubleType(), True),
     StructField("Humidity(%)", DoubleType(), True),
     StructField("Pressure(in)", DoubleType(), True),
     StructField("Visibility(mi)", DoubleType(), True),
