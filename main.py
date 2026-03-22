@@ -24,7 +24,6 @@ spark = (
     .appName("US-Accidents-Project")
     .config("spark.driver.memory", "4g")
     .config("spark.executor.memory", "4g")
-    .config("spark.local.dir", "E:/spark_temp")
     .config("spark.driver.host", "localhost")
     .config("spark.sql.debug.maxToStringFields", "1000")
     .getOrCreate()
