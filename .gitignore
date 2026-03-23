@@ -13,6 +13,7 @@ __pycache__/
 env/
 venv/
 bigdata_pyspark/
+analytics_results/
 
 # Jupyter
 .ipynb_checkpoints

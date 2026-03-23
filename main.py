@@ -1,7 +1,7 @@
 import os
 import sys
 
-from analytics.om_requests import *
+from analytics.transformation import transform_data
 
 from config import DATA_PATH, CATEGORICAL_COLUMNS, NUMERICAL_COLUMNS
 
@@ -12,7 +12,7 @@ from modules.extraction import load_data, verify_data
 from modules.parsing import parse_and_transform_features
 from modules.data_quality import check_data_quality, remove_duplicates, handle_missing_values
 from modules.eda_stats import get_metadata,run_categorical_eda,run_numerical_eda,run_numerical_plots
-from modules.olap import create_olap, check_olap_dimensions
+from modules.olap import create_olap
 
 from schemas.raw_schema import raw_schema
 
@@ -22,8 +22,9 @@ os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 spark = (
     SparkSession.builder
     .appName("US-Accidents-Project")
-    .config("spark.driver.memory", "4g")
+    .config("spark.driver.memory", "8g")
     .config("spark.executor.memory", "4g")
+    .config("spark.sql.autoBroadcastJoinThreshold", "-1")
     .config("spark.driver.host", "localhost")
     .config("spark.sql.debug.maxToStringFields", "1000")
     .getOrCreate()
@@ -75,7 +76,7 @@ olap = create_olap(processed_df)
 print("\n--- Етап видобування, аналізу та попередньої обробки успішно завершено ---")
 
 
-print("\n --- запити до OLAP-куба --- \n")
-om_requests(olap)
+print("\n --- Бізнес-запити до OLAP --- \n")
+transform_data(olap)
 
 spark.stop()
