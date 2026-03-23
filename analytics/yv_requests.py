@@ -1,16 +1,17 @@
 from pyspark.sql import functions as F, Window
+from analytics.utils import save_results
 
 def yv_requests(olap):
     analysis_functions = [
-        ("1. Середня видимість за тяжкістю", get_visibility_by_severity),
-        ("2. ТОП POI для тяжких аварій (Severity 4)", get_top_poi_for_severe_accidents),
-        ("3. Ранжування міст у кожному штаті", get_city_ranking_by_state),
-        ("4. Максимальна тривалість за освітленістю", get_max_duration_by_light),
-        ("5. Сезонність найтяжчих аварій", get_severe_accidents_seasonality),
-        ("6. Відхилення кількості аварій міста від сер. по штату", get_city_accident_deviation)
+        ("1. Середня видимість за тяжкістю", "visibility_by_severity", get_visibility_by_severity),
+        ("2. ТОП POI для тяжких аварій (Severity 4)", "top_poi_distribution", get_top_poi_for_severe_accidents),
+        ("3. Ранжування міст у кожному штаті", "city_rankings", get_city_ranking_by_state),
+        ("4. Максимальна тривалість за освітленістю", "max_duration_light", get_max_duration_by_light),
+        ("5. Сезонність найтяжчих аварій", "seasonality_severe", get_severe_accidents_seasonality),
+        ("6. Відхилення кількості аварій міста від сер. по штату", "city_deviation", get_city_accident_deviation)
     ]
 
-    for title, func in analysis_functions:
+    for title, file_name, func in analysis_functions:
         print(f"{title}")
 
         df_result = func(olap)
@@ -18,6 +19,8 @@ def yv_requests(olap):
 
         print(f"--- План виконання трансформацій для '{title}' ---")
         df_result.explain()
+
+        save_results(df_result, file_name, "yana_vyklyuk")
 
         print("-" * 60 + "\n")
 

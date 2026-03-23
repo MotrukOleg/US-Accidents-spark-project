@@ -1,7 +1,7 @@
 import os
 import sys
 
-from analytics.transfromation import transform_data
+from analytics.transformation import transform_data
 
 from config import DATA_PATH, CATEGORICAL_COLUMNS, NUMERICAL_COLUMNS
 
@@ -22,8 +22,9 @@ os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 spark = (
     SparkSession.builder
     .appName("US-Accidents-Project")
-    .config("spark.driver.memory", "4g")
+    .config("spark.driver.memory", "8g")
     .config("spark.executor.memory", "4g")
+    .config("spark.sql.autoBroadcastJoinThreshold", "-1")
     .config("spark.driver.host", "localhost")
     .config("spark.sql.debug.maxToStringFields", "1000")
     .getOrCreate()
