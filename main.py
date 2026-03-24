@@ -22,7 +22,7 @@ os.environ['PYSPARK_DRIVER_PYTHON'] = sys.executable
 spark = (
     SparkSession.builder
     .appName("US-Accidents-Project")
-    .config("spark.driver.memory", "4g")
+    .config("spark.driver.memory", "8g")
     .config("spark.executor.memory", "4g")
     .config("spark.sql.autoBroadcastJoinThreshold", "-1")
     .config("spark.driver.host", "localhost")
