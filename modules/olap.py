@@ -8,10 +8,7 @@ from schemas.weather_dim_schema import weather_dim_schema
 from schemas.time_dim_schema import time_dim_schema
 from schemas.fact_schema import fact_schema
 
-
-
 def create_olap(df):
-
     road_cols = get_safe_cols(road_dim_schema, "RoadID", df)
 
     road_dim = (df.select(*road_cols)
