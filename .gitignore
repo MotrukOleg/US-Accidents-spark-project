@@ -62,3 +62,5 @@ build/
 dist/
 *.egg-info/
 *.parquet
+# Spark shuffle / spill directory
+spark-tmp/
