@@ -1,0 +1,11 @@
+services:
+  notebooks:
+    build: .
+    image: bigdatamining:latest
+    container_name: bigdatamining-notebooks
+    ports:
+      - "127.0.0.1:8888:8888"   # Jupyter Lab
+      - "127.0.0.1:4040:4040"   # Spark UI
+    volumes:
+      # Whole project is mounted, so edits to notebooks/modules and outputs in data/ stay on the host
+      - .:/app
