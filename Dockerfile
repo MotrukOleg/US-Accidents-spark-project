@@ -15,7 +15,7 @@ WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir jupyterlab==4.5.11 ipykernel==7.3.0
+    pip install --no-cache-dir jupyterlab==4.5.11 ipykernel==7.3.0 shap==0.51.0 lime==0.2.0.1
 
 COPY . /app
 
