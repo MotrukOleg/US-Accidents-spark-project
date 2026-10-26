@@ -5,12 +5,19 @@ services:
     container_name: bigdatamining-notebooks
     ports:
       - "127.0.0.1:8888:8888"   # Jupyter Lab
-      - "127.0.0.1:4040:4040"   # Spark UI
+      - "127.0.0.1:4040:4040"   # Spark UI (classification)
+      - "127.0.0.1:4041:4041"   # Spark UI (regression)
     environment:
       # Notebooks default to 16g locally; Docker Desktop usually gets only half of host RAM
       SPARK_DRIVER_MEMORY: ${SPARK_DRIVER_MEMORY:-8g}
       # Model notebooks: share of train to load (full train needs ~13 GB of RAM in Docker); e.g. 0.3 on a 16 GB laptop
       TRAIN_FRACTION: ${TRAIN_FRACTION:-1}
+      # *_model_yv notebooks: how many models / CV folds Spark trains at the same time
+      SPARK_PARALLELISM: ${SPARK_PARALLELISM:-2}
+      # *_model_yv notebooks: models trained at the same time on the full train (2 RandomForests need > 10 GB)
+      SPARK_FIT_PARALLELISM: ${SPARK_FIT_PARALLELISM:-1}
+      # *_model_yv notebooks: test rows explained by SHAP
+      SHAP_ROWS: ${SHAP_ROWS:-3000}
     volumes:
       # Whole project is mounted, so edits to notebooks/modules and outputs in data/ stay on the host
       - .:/app
