@@ -21,6 +21,7 @@ analytics_results/
 # PySpark / Spark
 metastore_db/
 spark-warehouse/
+spark-tmp/
 *.crc
 *.parquet
 *.snappy.parquet
