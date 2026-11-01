@@ -1,4 +1,5 @@
-# Python
+.idea/
+.venv/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -12,6 +13,7 @@ __pycache__/
 env/
 venv/
 bigdata_pyspark/
+analytics_results/
 
 # Jupyter
 .ipynb_checkpoints
@@ -19,6 +21,7 @@ bigdata_pyspark/
 # PySpark / Spark
 metastore_db/
 spark-warehouse/
+spark-tmp/
 *.crc
 *.parquet
 *.snappy.parquet
@@ -26,6 +29,7 @@ spark-warehouse/
 # Data files
 data/
 *.csv
+*.parquet
 *.tsv
 *.json
 *.gz
@@ -36,6 +40,9 @@ data/
 
 # VSCode
 .vscode/
+
+# VStudio
+.vs/
 
 # Docker
 *.tar
@@ -55,3 +62,6 @@ logs/
 build/
 dist/
 *.egg-info/
+*.parquet
+# Spark shuffle / spill directory
+spark-tmp/

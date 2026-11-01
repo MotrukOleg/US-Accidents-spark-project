@@ -1,0 +1,15 @@
+.git
+.idea
+.vscode
+.venv
+venv
+env
+bigdata_pyspark
+__pycache__
+.ipynb_checkpoints
+data
+spark-tmp
+spark-warehouse
+metastore_db
+analytics_results
+*.log
